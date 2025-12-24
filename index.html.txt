@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Christmas Greeting for You!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS 样式设定 --- */
+        :root {
+            --christmas-red: #d42426;
+            --christmas-green: #2f5d62;
+            --gold: #f8b24f;
+            --cream: #fffaf0;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* 防止滚动条出现 */
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            color: var(--cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 雪花容器 */
+        #snow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 确保雪花不会挡住点击操作 */
+            z-index: 1;
+        }
+
+        /* 卡片主体容器 */
+        .card-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(248, 178, 79, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            max-width: 80%;
+            animation: popIn 1s ease-out;
+        }
+
+        /* 标题样式 */
+        h1.main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--christmas-red), var(--gold), var(--christmas-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: shimmer 3s infinite linear;
+        }
+
+        /* 礼物和元素区域 */
+        .elements-container {
+            font-size: 4rem;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .element {
+            display: inline-block;
+            /* 让礼物轻轻浮动 */
+            animation: float 3s ease-in-out infinite;
+        }
+        .element:nth-child(2) { animation-delay: 0.5s; }
+        .element:nth-child(3) { animation-delay: 1s; }
+
+        /* 祝福语样式 */
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+            color: #eee;
+        }
+        
+        .highlight {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* --- 动画定义 --- */
+        /* 卡片弹出动画 */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* 礼物浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* 标题闪光动画 */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* 雪花下落动画 (由JS动态添加) */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation-name: fall;
+            animation-timing-function: linear;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+
+        /* 响应式适配手机端 */
+        @media (max-width: 600px) {
+            h1.main-title { font-size: 3rem; }
+            .elements-container { font-size: 3rem; }
+            .card-container { padding: 25px; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="snow-container"></div>
+
+    <div class="card-container">
+        <h1 class="main-title">Merry Christmas</h1>
+        
+        <div class="elements-container">
+            <span class="element">🎁</span>
+            <span class="element">🎄</span>
+            <span class="element">🔔</span>
+        </div>
+
+        <p class="message">
+            Wishing you a season filled with warmth, comfort, and good cheer. May this Christmas bring you <span class="highlight">happiness</span> that lasts throughout the coming year!
+        </p>
+    </div>
+
+    <script>
+        // --- JavaScript 雪花效果 ---
+        function createSnowflake() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            // 随机大小
+            const size = Math.random() * 5 + 2 + 'px';
+            snowflake.style.width = size;
+            snowflake.style.height = size;
+
+            // 随机水平位置
+            snowflake.style.left = Math.random() * 100 + 'vw';
+
+            // 随机下落持续时间 (3s 到 8s 之间)
+            const duration = Math.random() * 5 + 3 + 's';
+            snowflake.style.animationDuration = duration;
+
+            // 随机透明度
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+            
+            snowContainer.appendChild(snowflake);
+
+            // 动画结束后移除元素，防止内存泄漏
+            setTimeout(() => {
+                snowflake.remove();
+            }, parseFloat(duration) * 1000);
+        }
+
+        // 每隔一定时间创建一个新雪花
+        setInterval(createSnowflake, 150);
+    </script>
+</body>
+</html>
